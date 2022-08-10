@@ -335,7 +335,7 @@ mod tests {
         RefreshBoxWrapper::new(
             ErgoBox::new(
                 value,
-                RefreshContract::new(inputs.into()).unwrap().ergo_tree(),
+                RefreshContract::create(inputs.into()).unwrap().ergo_tree(),
                 Some(tokens),
                 NonMandatoryRegisters::empty(),
                 creation_height,
