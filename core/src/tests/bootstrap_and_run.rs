@@ -18,7 +18,6 @@ use crate::cli_commands::bootstrap::Addresses;
 use crate::cli_commands::bootstrap::BootstrapConfig;
 use crate::cli_commands::bootstrap::BootstrapInput;
 use crate::cli_commands::bootstrap::NftMintDetails;
-use crate::cli_commands::bootstrap::OracleConfigFields;
 use crate::cli_commands::bootstrap::TokenMintDetails;
 use crate::cli_commands::bootstrap::TokensToMint;
 use crate::contracts::ballot::BallotContractParameters;
@@ -27,6 +26,7 @@ use crate::contracts::refresh::RefreshContractParameters;
 use crate::contracts::update::UpdateContractParameters;
 use crate::node_interface;
 use crate::node_interface::SubmitTransaction;
+use crate::oracle_config::OracleConfig;
 use crate::pool_commands::test_utils::init_log_tests;
 use crate::pool_commands::test_utils::LocalTxSigner;
 use crate::pool_commands::test_utils::WalletDataMock;
@@ -44,7 +44,7 @@ impl<'a> SubmitTransaction for ChainSubmitTx<'a> {
     }
 }
 
-fn bootstrap(wallet: &Wallet, address: &Address, chain: &mut ChainSim) -> OracleConfigFields {
+fn bootstrap(wallet: &Wallet, address: &Address, chain: &mut ChainSim) -> OracleConfig {
     let ctx = force_any_val::<ErgoStateContext>();
 
     let unspent_boxes = chain.get_unspent_boxes(&address.script().unwrap());
