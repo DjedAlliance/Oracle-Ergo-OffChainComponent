@@ -349,7 +349,7 @@ mod tests {
         ergotree_interpreter::sigma_protocol::private_input::DlogProverInput,
         ergotree_ir::{
             chain::{
-                address::{AddressEncoder, NetworkAddress},
+                address::AddressEncoder,
                 ergo_box::{box_value::BoxValue, ErgoBox},
                 token::{Token, TokenId},
             },
