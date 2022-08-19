@@ -241,6 +241,7 @@ impl TryFrom<BootstrapConfigSerde> for BootstrapConfig {
 pub struct OracleContractParametersSerde {
     p2s: String,
     pool_nft_index: usize,
+    pool_nft_token_id: String,
 }
 
 impl From<OracleContractParameters> for OracleContractParametersSerde {
@@ -248,6 +249,7 @@ impl From<OracleContractParameters> for OracleContractParametersSerde {
         OracleContractParametersSerde {
             p2s: p.p2s.to_base58(),
             pool_nft_index: p.pool_nft_index,
+            pool_nft_token_id: p.pool_nft_token_id.into(),
         }
     }
 }
@@ -260,6 +262,7 @@ impl TryFrom<OracleContractParametersSerde> for OracleContractParameters {
         Ok(OracleContractParameters {
             p2s,
             pool_nft_index: contract.pool_nft_index,
+            pool_nft_token_id: TokenId::from_base64(&contract.pool_nft_token_id).unwrap(),
         })
     }
 }

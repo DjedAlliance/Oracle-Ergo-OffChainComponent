@@ -449,6 +449,7 @@ ballot_contract_parameters:
 oracle_contract_parameters:
     p2s: CxiAhQ241nmgPp39VgGTWPjKDNauyuu8p9Rc2x5pWf5znRwmFC3TbNqGBmBZmAhE6SUG2xMBpdLp3GZUQs9VEcrnHtCzpMqXcdsbtELqoPRAmHtNarK8VnfyhHzZijDGggbwEZzQRhw1U45N75BFYWrZSdgrgZLnpr5pC1Rs979hB8UTYHU2p1vPqPbJe44tvZ7E1mJJqqKFBdCR2hW8Ka7dCTWEv4yviUWRtHjpFnBCsFanMQ8R7YdHxh1Z36JFCscdvHvHCQsCZo7Z3AAdq8F5cwoWrZMY9eBP
     pool_nft_index: 5
+    pool_nft_token_id: FHF/kXzbGVH8N44x/8Cgp3i92xDWUJwgHLTtJVDvn4M=
 ").unwrap();
         let ctx = force_any_val::<ErgoStateContext>();
         let height = ctx.pre_header.height;

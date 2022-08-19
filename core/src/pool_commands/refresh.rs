@@ -358,13 +358,16 @@ mod tests {
         oracle_contract_parameters: &OracleContractParameters,
         token_ids: &TokenIds,
     ) -> Vec<OracleBoxWrapper> {
-        let oracle_box_wrapper_inputs =
-            OracleBoxWrapperInputs::from((oracle_contract_parameters, token_ids));
+        let oracle_box_wrapper_inputs = OracleBoxWrapperInputs {
+            contract_parameters: oracle_contract_parameters,
+            oracle_token_id: &token_ids.oracle_token_id,
+            reward_token_id: &token_ids.reward_token_id,
+        };
         datapoints
             .into_iter()
             .zip(pub_keys)
             .map(|(datapoint, pub_key)| {
-                (
+                OracleBoxWrapper::new(
                     make_datapoint_box(
                         pub_key.clone(),
                         datapoint,
@@ -375,8 +378,7 @@ mod tests {
                     ),
                     oracle_box_wrapper_inputs,
                 )
-                    .try_into()
-                    .unwrap()
+                .unwrap()
             })
             .collect()
     }
@@ -388,9 +390,12 @@ mod tests {
         let reward_token_id = force_any_val::<TokenId>();
         dbg!(&reward_token_id);
         let pool_contract_parameters = PoolContractParameters::default();
-        let oracle_contract_parameters = OracleContractParameters::default();
-        let refresh_contract_parameters = RefreshContractParameters::default();
         let token_ids = generate_token_ids();
+        let oracle_contract_parameters = OracleContractParameters {
+            pool_nft_token_id: token_ids.pool_nft_token_id.clone(),
+            ..OracleContractParameters::default()
+        };
+        let refresh_contract_parameters = RefreshContractParameters::default();
 
         let inputs = RefreshBoxWrapperInputs {
             contract_parameters: &refresh_contract_parameters,

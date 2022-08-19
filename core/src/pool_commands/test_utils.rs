@@ -30,7 +30,6 @@ use crate::box_kind::PoolBoxWrapperInputs;
 use crate::box_kind::UpdateBoxWrapper;
 use crate::box_kind::VoteBallotBoxWrapper;
 use crate::contracts::oracle::OracleContract;
-use crate::contracts::oracle::OracleContractInputs;
 use crate::contracts::oracle::OracleContractParameters;
 use crate::contracts::pool::PoolContract;
 use crate::contracts::pool::PoolContractInputs;
@@ -182,16 +181,13 @@ pub(crate) fn make_datapoint_box(
     ]
     .try_into()
     .unwrap();
-    let parameters = OracleContractParameters::default();
-    let oracle_contract_inputs = OracleContractInputs {
-        contract_parameters: &parameters,
-        pool_nft_token_id: &token_ids.pool_nft_token_id,
+    let parameters = OracleContractParameters {
+        pool_nft_token_id: token_ids.pool_nft_token_id.clone(),
+        ..OracleContractParameters::default()
     };
     ErgoBox::new(
         value,
-        OracleContract::new(oracle_contract_inputs)
-            .unwrap()
-            .ergo_tree(),
+        OracleContract::create(&parameters).unwrap().ergo_tree(),
         Some(tokens),
         NonMandatoryRegisters::new(
             vec![

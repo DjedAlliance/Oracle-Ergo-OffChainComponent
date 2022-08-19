@@ -205,10 +205,13 @@ impl<'a> OraclePool<'a> {
 
         let refresh_box_scan_name = "Refresh Box Scan";
 
-        let oracle_box_wrapper_inputs =
-            OracleBoxWrapperInputs::from((&config.oracle_contract_parameters, &config.token_ids));
+        let oracle_box_wrapper_inputs = OracleBoxWrapperInputs {
+            contract_parameters: &config.oracle_contract_parameters,
+            oracle_token_id: &config.token_ids.oracle_token_id,
+            reward_token_id: &config.token_ids.reward_token_id,
+        };
         let datapoint_contract_address =
-            OracleContract::new(oracle_box_wrapper_inputs.into())?.ergo_tree();
+            OracleContract::load(oracle_box_wrapper_inputs.contract_parameters)?.ergo_tree();
 
         let ballot_box_wrapper_inputs = BallotBoxWrapperInputs {
             parameters: &config.ballot_contract_parameters,

@@ -1,5 +1,3 @@
-use std::convert::TryFrom;
-
 use ergo_lib::chain::ergo_box::box_builder::ErgoBoxCandidateBuilder;
 use ergo_lib::chain::ergo_box::box_builder::ErgoBoxCandidateBuilderError;
 use ergo_lib::ergo_chain_types::EcPoint;
@@ -17,7 +15,6 @@ use thiserror::Error;
 use crate::contracts::oracle::OracleContract;
 use crate::contracts::oracle::OracleContractError;
 use crate::contracts::oracle::OracleContractParameters;
-use crate::oracle_config::TokenIds;
 
 pub trait OracleBox {
     fn contract(&self) -> &OracleContract;
@@ -106,7 +103,8 @@ impl OracleBoxWrapper {
             .ok_or(OracleBoxError::NoEpochCounter)?
             .try_extract_into::<i32>()?;
 
-        let contract = OracleContract::from_ergo_tree(b.ergo_tree.clone(), inputs.into())?;
+        let contract =
+            OracleContract::from_ergo_tree(b.ergo_tree.clone(), inputs.contract_parameters)?;
 
         Ok(Self(b, contract))
     }
@@ -162,30 +160,27 @@ pub struct OracleBoxWrapperInputs<'a> {
     pub oracle_token_id: &'a TokenId,
     /// Reward token is expected to reside in `tokens(1)` of the oracle box.
     pub reward_token_id: &'a TokenId,
-    /// This token id appears as a constant in the oracle contract.
-    pub pool_nft_token_id: &'a TokenId,
 }
 
-impl<'a> From<(&'a OracleContractParameters, &'a TokenIds)> for OracleBoxWrapperInputs<'a> {
-    fn from(t: (&'a OracleContractParameters, &'a TokenIds)) -> Self {
-        let contract_parameters = t.0;
-        let token_ids = t.1;
-        OracleBoxWrapperInputs {
-            contract_parameters,
-            oracle_token_id: &token_ids.oracle_token_id,
-            reward_token_id: &token_ids.reward_token_id,
-            pool_nft_token_id: &token_ids.pool_nft_token_id,
-        }
-    }
-}
+// impl<'a> From<(&'a OracleContractParameters, &'a TokenIds)> for OracleBoxWrapperInputs<'a> {
+//     fn from(t: (&'a OracleContractParameters, &'a TokenIds)) -> Self {
+//         let contract_parameters = t.0;
+//         let token_ids = t.1;
+//         OracleBoxWrapperInputs {
+//             contract_parameters,
+//             oracle_token_id: &token_ids.oracle_token_id,
+//             reward_token_id: &token_ids.reward_token_id,
+//         }
+//     }
+// }
 
-impl<'a> TryFrom<(ErgoBox, OracleBoxWrapperInputs<'a>)> for OracleBoxWrapper {
-    type Error = OracleBoxError;
+// impl<'a> TryFrom<(ErgoBox, OracleBoxWrapperInputs<'a>)> for OracleBoxWrapper {
+//     type Error = OracleBoxError;
 
-    fn try_from(value: (ErgoBox, OracleBoxWrapperInputs)) -> Result<Self, Self::Error> {
-        OracleBoxWrapper::new(value.0, value.1)
-    }
-}
+//     fn try_from(value: (ErgoBox, OracleBoxWrapperInputs)) -> Result<Self, Self::Error> {
+//         OracleBoxWrapper::new(value.0, value.1)
+//     }
+// }
 
 impl From<OracleBoxWrapper> for ErgoBox {
     fn from(w: OracleBoxWrapper) -> Self {

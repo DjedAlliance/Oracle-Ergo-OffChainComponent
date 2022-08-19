@@ -74,10 +74,11 @@ pub fn build_action(
             {
                 PublishDataPointCommandInputs::LocalDataPointBoxExists(local_datapoint_box_source)
             } else if let Address::P2Pk(public_key) = ORACLE_CONFIG.oracle_address.address() {
-                let oracle_box_wrapper_inputs = OracleBoxWrapperInputs::from((
-                    &ORACLE_CONFIG.oracle_contract_parameters,
-                    &ORACLE_CONFIG.token_ids,
-                ));
+                let oracle_box_wrapper_inputs = OracleBoxWrapperInputs {
+                    contract_parameters: &ORACLE_CONFIG.oracle_contract_parameters,
+                    oracle_token_id: &ORACLE_CONFIG.token_ids.oracle_token_id,
+                    reward_token_id: &ORACLE_CONFIG.token_ids.reward_token_id,
+                };
                 PublishDataPointCommandInputs::FirstDataPoint {
                     public_key,
                     oracle_box_wrapper_inputs,

@@ -186,10 +186,9 @@ fn build_extract_reward_tokens_tx(
 
 #[cfg(test)]
 mod tests {
-    use std::convert::TryInto;
 
     use super::*;
-    use crate::box_kind::OracleBoxWrapperInputs;
+    use crate::box_kind::{OracleBoxWrapper, OracleBoxWrapperInputs};
     use crate::contracts::oracle::OracleContractParameters;
     use crate::pool_commands::test_utils::{
         find_input_boxes, generate_token_ids, make_datapoint_box, make_wallet_unspent_box,
@@ -214,9 +213,16 @@ mod tests {
 
         let num_reward_tokens_in_box = 100_u64;
 
-        let parameters = OracleContractParameters::default();
-        let oracle_box_wrapper_inputs = OracleBoxWrapperInputs::from((&parameters, &token_ids));
-        let oracle_box = (
+        let parameters = OracleContractParameters {
+            pool_nft_token_id: token_ids.pool_nft_token_id.clone(),
+            ..OracleContractParameters::default()
+        };
+        let oracle_box_wrapper_inputs = OracleBoxWrapperInputs {
+            contract_parameters: &parameters,
+            oracle_token_id: &token_ids.oracle_token_id,
+            reward_token_id: &token_ids.reward_token_id,
+        };
+        let oracle_box = OracleBoxWrapper::new(
             make_datapoint_box(
                 *oracle_pub_key,
                 200,
@@ -227,8 +233,7 @@ mod tests {
             ),
             oracle_box_wrapper_inputs,
         )
-            .try_into()
-            .unwrap();
+        .unwrap();
         let local_datapoint_box_source = OracleBoxMock { oracle_box };
 
         let change_address =

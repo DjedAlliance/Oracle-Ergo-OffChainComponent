@@ -35,6 +35,8 @@ impl Default for OracleContractParameters {
         OracleContractParameters {
             p2s,
             pool_nft_index: 5,
+            pool_nft_token_id: TokenId::from_base64("RytLYlBlU2hWbVlxM3Q2dzl6JEMmRilKQE1jUWZUalc=")
+                .unwrap(),
         }
     }
 }

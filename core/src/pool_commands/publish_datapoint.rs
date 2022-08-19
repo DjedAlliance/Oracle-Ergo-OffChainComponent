@@ -171,7 +171,7 @@ pub fn build_publish_first_datapoint_action(
     )?;
 
     let output_candidate = make_oracle_box_candidate(
-        &OracleContract::new(inputs.into())?,
+        &OracleContract::load(inputs.contract_parameters)?,
         public_key,
         new_datapoint,
         1,
@@ -236,6 +236,7 @@ mod tests {
     use std::convert::TryInto;
 
     use super::*;
+    use crate::box_kind::OracleBoxWrapper;
     use crate::contracts::oracle::OracleContractParameters;
     use crate::contracts::pool::PoolContractParameters;
     use crate::pool_commands::test_utils::{
@@ -271,7 +272,10 @@ mod tests {
         let height = ctx.pre_header.height;
         let token_ids = generate_token_ids();
         let reward_token_id = force_any_val::<TokenId>();
-        let oracle_contract_parameters = OracleContractParameters::default();
+        let oracle_contract_parameters = OracleContractParameters {
+            pool_nft_token_id: token_ids.pool_nft_token_id.clone(),
+            ..OracleContractParameters::default()
+        };
         let pool_contract_parameters = PoolContractParameters::default();
         dbg!(&reward_token_id);
         let in_pool_box = make_pool_box(
@@ -290,9 +294,12 @@ mod tests {
             pool_box: in_pool_box,
         };
 
-        let oracle_box_wrapper_inputs =
-            OracleBoxWrapperInputs::from((&oracle_contract_parameters, &token_ids));
-        let oracle_box = (
+        let oracle_box_wrapper_inputs = OracleBoxWrapperInputs {
+            contract_parameters: &oracle_contract_parameters,
+            oracle_token_id: &token_ids.oracle_token_id,
+            reward_token_id: &token_ids.reward_token_id,
+        };
+        let oracle_box = OracleBoxWrapper::new(
             make_datapoint_box(
                 *oracle_pub_key,
                 200,
@@ -303,8 +310,7 @@ mod tests {
             ),
             oracle_box_wrapper_inputs,
         )
-            .try_into()
-            .unwrap();
+        .unwrap();
         let local_datapoint_box_source = OracleBoxMock { oracle_box };
 
         let change_address =
@@ -406,8 +412,11 @@ mod tests {
                 .unwrap();
 
         let oracle_contract_parameters = OracleContractParameters::default();
-        let oracle_box_wrapper_inputs =
-            OracleBoxWrapperInputs::from((&oracle_contract_parameters, &token_ids));
+        let oracle_box_wrapper_inputs = OracleBoxWrapperInputs {
+            contract_parameters: &oracle_contract_parameters,
+            oracle_token_id: &token_ids.oracle_token_id,
+            reward_token_id: &token_ids.reward_token_id,
+        };
         let action = build_publish_first_datapoint_action(
             &WalletDataMock {
                 unspent_boxes: unspent_boxes.clone(),
