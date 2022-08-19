@@ -26,7 +26,7 @@ pub fn start_get_api(repost_receiver: Receiver<bool>) {
     // Basic oracle information
     app.get("/oracleInfo", move |context| {
         let response_json = json! ( {
-            "oracle_address": &ORACLE_CONFIG.oracle_address,
+            "oracle_address": &ORACLE_CONFIG.oracle_address.to_base58(),
         } );
 
         context
