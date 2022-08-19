@@ -79,7 +79,8 @@ impl PoolBoxWrapper {
         } else {
             return Err(PoolBoxError::NoRewardToken);
         }
-        let contract = PoolContract::from_ergo_tree(b.ergo_tree.clone(), inputs.into())?;
+        let contract =
+            PoolContract::from_ergo_tree(b.ergo_tree.clone(), inputs.contract_parameters)?;
         Ok(Self(b, contract))
     }
 }
@@ -125,10 +126,6 @@ pub struct PoolBoxWrapperInputs<'a> {
     pub pool_nft_token_id: &'a TokenId,
     /// Reward token is expected to reside in `tokens(1)` of the pool box.
     pub reward_token_id: &'a TokenId,
-    /// This token id appears as a constant in the pool contract.
-    pub refresh_nft_token_id: &'a TokenId,
-    /// This token id also appears as a constant in the pool contract.
-    pub update_nft_token_id: &'a TokenId,
 }
 
 pub fn make_pool_box_candidate(

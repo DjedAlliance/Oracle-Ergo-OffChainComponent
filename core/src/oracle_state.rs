@@ -221,8 +221,6 @@ impl<'a> OraclePool<'a> {
             contract_parameters: &config.pool_contract_parameters,
             pool_nft_token_id: &config.token_ids.pool_nft_token_id,
             reward_token_id: &config.token_ids.reward_token_id,
-            refresh_nft_token_id: &config.token_ids.refresh_nft_token_id,
-            update_nft_token_id: &config.token_ids.update_nft_token_id,
         };
         let refresh_box_wrapper_inputs = RefreshBoxWrapperInputs {
             contract_parameters: &config.refresh_contract_parameters,

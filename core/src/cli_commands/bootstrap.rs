@@ -34,7 +34,7 @@ use crate::{
     contracts::{
         ballot::BallotContractParameters,
         oracle::OracleContractParameters,
-        pool::{PoolContract, PoolContractInputs, PoolContractParameters},
+        pool::{PoolContract, PoolContractError, PoolContractParameters},
         refresh::{RefreshContract, RefreshContractError, RefreshContractParameters},
         update::{
             UpdateContract, UpdateContractError, UpdateContractInputs, UpdateContractParameters,
@@ -369,12 +369,10 @@ pub(crate) fn perform_bootstrap_chained_transaction(
         p2s: config.pool_contract_parameters.p2s.clone(),
         refresh_nft_index: config.pool_contract_parameters.refresh_nft_index,
         update_nft_index: config.pool_contract_parameters.update_nft_index,
+        refresh_nft_token_id: token_ids.refresh_nft_token_id.clone(),
+        update_nft_token_id: token_ids.update_nft_token_id.clone(),
     };
-    let pool_contract = PoolContract::new(PoolContractInputs::from((
-        &pool_contract_parameters,
-        &token_ids,
-    )))
-    .unwrap();
+    let pool_contract = PoolContract::create(&pool_contract_parameters)?;
 
     let reward_tokens_for_pool_box = Token {
         token_id: reward_token.token_id.clone(),
@@ -649,8 +647,10 @@ pub enum BootstrapError {
     SigmaParse(SigmaParsingError),
     #[error("Node doesn't have a change address set")]
     NoChangeAddressSetInNode,
-    #[error("Node doesn't have a change address set")]
+    #[error("RefreshContractError: {0}")]
     RefreshContract(RefreshContractError),
+    #[error("PoolContractError: {0}")]
+    PoolContract(PoolContractError),
     #[error("Update contract error: {0}")]
     UpdateContract(UpdateContractError),
     #[error("Bootstrap config file already exists")]

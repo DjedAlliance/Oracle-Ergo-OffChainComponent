@@ -50,6 +50,14 @@ impl Default for PoolContractParameters {
             p2s,
             refresh_nft_index: 2,
             update_nft_index: 3,
+            refresh_nft_token_id: TokenId::from_base64(
+                "VGpXblpyNHU3eCFBJUQqRy1LYU5kUmdVa1hwMnM1djg=",
+            )
+            .unwrap(),
+            update_nft_token_id: TokenId::from_base64(
+                "YlFlVGhXbVpxNHQ3dyF6JUMqRi1KQE5jUmZValhuMnI=",
+            )
+            .unwrap(),
         }
     }
 }

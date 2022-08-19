@@ -272,6 +272,8 @@ struct PoolContractParametersSerde {
     p2s: String,
     refresh_nft_index: usize,
     update_nft_index: usize,
+    refresh_nft_token_id: String,
+    update_nft_token_id: String,
 }
 
 impl From<PoolContractParameters> for PoolContractParametersSerde {
@@ -280,6 +282,8 @@ impl From<PoolContractParameters> for PoolContractParametersSerde {
             p2s: p.p2s.to_base58(),
             refresh_nft_index: p.refresh_nft_index,
             update_nft_index: p.update_nft_index,
+            refresh_nft_token_id: p.refresh_nft_token_id.into(),
+            update_nft_token_id: p.update_nft_token_id.into(),
         }
     }
 }
@@ -292,6 +296,8 @@ impl TryFrom<PoolContractParametersSerde> for PoolContractParameters {
             p2s,
             refresh_nft_index: contract.refresh_nft_index,
             update_nft_index: contract.update_nft_index,
+            refresh_nft_token_id: TokenId::from_base64(&contract.refresh_nft_token_id).unwrap(),
+            update_nft_token_id: TokenId::from_base64(&contract.update_nft_token_id).unwrap(),
         })
     }
 }

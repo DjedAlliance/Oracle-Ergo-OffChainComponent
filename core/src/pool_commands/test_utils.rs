@@ -32,7 +32,6 @@ use crate::box_kind::VoteBallotBoxWrapper;
 use crate::contracts::oracle::OracleContract;
 use crate::contracts::oracle::OracleContractParameters;
 use crate::contracts::pool::PoolContract;
-use crate::contracts::pool::PoolContractInputs;
 use crate::contracts::pool::PoolContractParameters;
 use crate::node_interface::SignTransaction;
 use crate::oracle_config::TokenIds;
@@ -119,8 +118,6 @@ pub(crate) fn make_pool_box(
         contract_parameters: pool_contract_parameters,
         pool_nft_token_id: &token_ids.pool_nft_token_id,
         reward_token_id: &token_ids.reward_token_id,
-        refresh_nft_token_id: &token_ids.refresh_nft_token_id,
-        update_nft_token_id: &token_ids.update_nft_token_id,
     };
     let tokens = vec![
         Token::from((
@@ -134,15 +131,12 @@ pub(crate) fn make_pool_box(
     ]
     .try_into()
     .unwrap();
+
+    let pool_contract = PoolContract::create(pool_contract_parameters).unwrap();
     PoolBoxWrapper::new(
         ErgoBox::new(
             value,
-            PoolContract::new(PoolContractInputs::from((
-                pool_contract_parameters,
-                token_ids,
-            )))
-            .unwrap()
-            .ergo_tree(),
+            pool_contract.ergo_tree(),
             Some(tokens),
             NonMandatoryRegisters::new(
                 vec![

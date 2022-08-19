@@ -389,8 +389,12 @@ mod tests {
         let height = ctx.pre_header.height;
         let reward_token_id = force_any_val::<TokenId>();
         dbg!(&reward_token_id);
-        let pool_contract_parameters = PoolContractParameters::default();
         let token_ids = generate_token_ids();
+        let pool_contract_parameters = PoolContractParameters {
+            refresh_nft_token_id: token_ids.refresh_nft_token_id.clone(),
+            update_nft_token_id: token_ids.update_nft_token_id.clone(),
+            ..Default::default()
+        };
         let oracle_contract_parameters = OracleContractParameters {
             pool_nft_token_id: token_ids.pool_nft_token_id.clone(),
             ..OracleContractParameters::default()

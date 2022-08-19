@@ -276,7 +276,11 @@ mod tests {
             pool_nft_token_id: token_ids.pool_nft_token_id.clone(),
             ..OracleContractParameters::default()
         };
-        let pool_contract_parameters = PoolContractParameters::default();
+        let pool_contract_parameters = PoolContractParameters {
+            refresh_nft_token_id: token_ids.refresh_nft_token_id.clone(),
+            update_nft_token_id: token_ids.update_nft_token_id.clone(),
+            ..Default::default()
+        };
         dbg!(&reward_token_id);
         let in_pool_box = make_pool_box(
             200,
