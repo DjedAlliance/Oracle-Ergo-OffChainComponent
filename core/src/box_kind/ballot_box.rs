@@ -85,7 +85,8 @@ impl BallotBoxWrapper {
             return Err(BallotBoxError::UnexpectedGroupElementInR4);
         }
 
-        let contract = BallotContract::from_ergo_tree(ergo_box.ergo_tree.clone(), inputs.into())?;
+        let contract =
+            BallotContract::from_ergo_tree(ergo_box.ergo_tree.clone(), inputs.parameters)?;
         Ok(Self { ergo_box, contract })
     }
 }
@@ -95,8 +96,6 @@ pub struct BallotBoxWrapperInputs<'a> {
     pub parameters: &'a BallotContractParameters,
     /// Ballot token is expected to reside in `tokens(0)` of the ballot box.
     pub ballot_token_id: &'a TokenId,
-    /// This token id appears as a constant in the ballot contract.
-    pub update_nft_token_id: &'a TokenId,
 }
 
 /// A Ballot Box with vote parameters guaranteed to be set
@@ -147,7 +146,8 @@ impl VoteBallotBoxWrapper {
             .ok_or(BallotBoxError::NoRewardTokenQuantityInR8)?
             .try_extract_into::<i64>()? as u64;
 
-        let contract = BallotContract::from_ergo_tree(ergo_box.ergo_tree.clone(), inputs.into())?;
+        let contract =
+            BallotContract::from_ergo_tree(ergo_box.ergo_tree.clone(), inputs.parameters)?;
         let vote_parameters = CastBallotBoxVoteParameters {
             pool_box_address_hash,
             reward_token_id,

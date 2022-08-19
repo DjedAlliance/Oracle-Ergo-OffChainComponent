@@ -213,7 +213,6 @@ impl<'a> OraclePool<'a> {
         let ballot_box_wrapper_inputs = BallotBoxWrapperInputs {
             parameters: &config.ballot_contract_parameters,
             ballot_token_id: &config.token_ids.ballot_token_id,
-            update_nft_token_id: &config.token_ids.update_nft_token_id,
         };
         let pool_box_wrapper_inputs = PoolBoxWrapperInputs {
             contract_parameters: &config.pool_contract_parameters,
@@ -259,7 +258,7 @@ impl<'a> OraclePool<'a> {
             }
 
             let ballot_contract_address =
-                BallotContract::new(ballot_box_wrapper_inputs.into())?.ergo_tree();
+                BallotContract::load(ballot_box_wrapper_inputs.parameters)?.ergo_tree();
             // Local ballot box may not exist yet.
             if let Ok(local_scan) = register_local_ballot_box_scan(
                 &ballot_contract_address,

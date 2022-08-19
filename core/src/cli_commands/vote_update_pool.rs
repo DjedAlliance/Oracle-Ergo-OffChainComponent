@@ -22,9 +22,7 @@ use ergo_node_interface::node_interface::NodeError;
 use crate::{
     box_kind::{make_local_ballot_box_candidate, BallotBox},
     cli_commands::ergo_explorer_transaction_link,
-    contracts::ballot::{
-        BallotContract, BallotContractError, BallotContractInputs, BallotContractParameters,
-    },
+    contracts::ballot::{BallotContract, BallotContractError, BallotContractParameters},
     node_interface::{current_block_height, get_wallet_status, sign_and_submit_transaction},
     oracle_config::{TokenIds, ORACLE_CONFIG},
     oracle_state::{LocalBallotBoxSource, OraclePool, StageError},
@@ -203,11 +201,7 @@ fn build_tx_for_first_ballot_box(
         token_id: reward_token_id,
         amount: TokenAmount::try_from(reward_token_amount as u64).unwrap(),
     };
-    let inputs = BallotContractInputs {
-        contract_parameters: ballot_contract_parameters,
-        update_nft_token_id: &token_ids.update_nft_token_id,
-    };
-    let contract = BallotContract::new(inputs)?;
+    let contract = BallotContract::load(ballot_contract_parameters)?;
     let ballot_token = Token {
         token_id: token_ids.ballot_token_id.clone(),
         amount: 1.try_into().unwrap(),
@@ -361,11 +355,10 @@ mod tests {
         let inputs = BallotBoxWrapperInputs {
             parameters: &ballot_contract_parameters,
             ballot_token_id: &token_ids.ballot_token_id,
-            update_nft_token_id: &token_ids.update_nft_token_id,
         };
         let in_ballot_box = ErgoBox::from_box_candidate(
             &make_local_ballot_box_candidate(
-                &BallotContract::new(inputs.into()).unwrap(),
+                &BallotContract::load(inputs.parameters).unwrap(),
                 secret.public_image(),
                 height - 2,
                 ballot_token,

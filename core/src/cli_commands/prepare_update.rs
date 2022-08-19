@@ -445,17 +445,11 @@ ballot_contract_parameters:
   min_storage_rent_index: 0
   min_storage_rent: 10000000
   update_nft_index: 6
+  update_nft_token_id: SOAloePnia3O3cXSElkLDx9iETxIgnlXEtVCqGbRF+g=
 oracle_contract_parameters:
     p2s: CxiAhQ241nmgPp39VgGTWPjKDNauyuu8p9Rc2x5pWf5znRwmFC3TbNqGBmBZmAhE6SUG2xMBpdLp3GZUQs9VEcrnHtCzpMqXcdsbtELqoPRAmHtNarK8VnfyhHzZijDGggbwEZzQRhw1U45N75BFYWrZSdgrgZLnpr5pC1Rs979hB8UTYHU2p1vPqPbJe44tvZ7E1mJJqqKFBdCR2hW8Ka7dCTWEv4yviUWRtHjpFnBCsFanMQ8R7YdHxh1Z36JFCscdvHvHCQsCZo7Z3AAdq8F5cwoWrZMY9eBP
     pool_nft_index: 5
-ballot_parameters:
-  contract_parameters:
-    p2s: KKTr5Kf9nPN9o2FAhMHorL6oucAzavWXyqqzDhVVBPcbmtcSzCAWHXN4qeFJh58jbinfZcMCxHqrHp5GBVffxNxV2D1o91NimDxZVsgNjiGd1B5y5j9LsAixoU3GbmMeJKiXBvahu2emyLWQva3oWQaAPRGaSMY8fUeqvPNZcFqd2zgUTZ2gYWdDrsKZGK36mnTtio4F9kBkquPBt5VyQfGjjTjU3MhCRrKtg5UesyndY4mA
-    min_storage_rent_index: 0
-    min_storage_rent: 10000000
-    update_nft_index: 6
-  vote_parameters: ~
-  ballot_token_owner_address: 3WzD3VNSK4RtDCZe8njzLzRnWbxcfpCneUcQncAVV9JBDE37nLxR").unwrap();
+").unwrap();
         let ctx = force_any_val::<ErgoStateContext>();
         let height = ctx.pre_header.height;
         let secret = force_any_val::<DlogProverInput>();

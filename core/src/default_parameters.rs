@@ -1,6 +1,6 @@
 //! Default parameter values for all Oracle-pool contracts. Tracks values described in EIP-0023.
 
-use ergo_lib::ergotree_ir::chain::address::AddressEncoder;
+use ergo_lib::ergotree_ir::chain::{address::AddressEncoder, token::TokenId};
 
 use crate::contracts::{
     ballot::BallotContractParameters, oracle::OracleContractParameters,
@@ -19,6 +19,10 @@ impl Default for BallotContractParameters {
             min_storage_rent_index: 0,
             min_storage_rent: 10000000,
             update_nft_index: 6,
+            update_nft_token_id: TokenId::from_base64(
+                "YlFlVGhXbVpxNHQ3dyF6JUMqRi1KQE5jUmZValhuMnI=",
+            )
+            .unwrap(),
         }
     }
 }

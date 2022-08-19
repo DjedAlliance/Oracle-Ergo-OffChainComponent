@@ -352,6 +352,7 @@ struct BallotContractParametersSerde {
     min_storage_rent_index: usize,
     min_storage_rent: u64,
     update_nft_index: usize,
+    update_nft_token_id: String,
 }
 
 impl From<BallotContractParameters> for BallotContractParametersSerde {
@@ -361,6 +362,7 @@ impl From<BallotContractParameters> for BallotContractParametersSerde {
             min_storage_rent_index: c.min_storage_rent_index,
             min_storage_rent: c.min_storage_rent,
             update_nft_index: c.update_nft_index,
+            update_nft_token_id: c.update_nft_token_id.into(),
         }
     }
 }
@@ -374,6 +376,7 @@ impl TryFrom<BallotContractParametersSerde> for BallotContractParameters {
             min_storage_rent_index: contract.min_storage_rent_index,
             min_storage_rent: contract.min_storage_rent,
             update_nft_index: contract.update_nft_index,
+            update_nft_token_id: TokenId::from_base64(&contract.update_nft_token_id).unwrap(),
         })
     }
 }
