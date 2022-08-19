@@ -1,5 +1,5 @@
 use crate::{
-    cli_commands::bootstrap::{Addresses, BootstrapConfig},
+    cli_commands::bootstrap::BootstrapConfig,
     contracts::{
         ballot::BallotContractParameters, oracle::OracleContractParameters,
         pool::PoolContractParameters, refresh::RefreshContractParameters,
@@ -38,7 +38,6 @@ pub struct OracleConfig {
     pub update_contract_parameters: UpdateContractParameters,
     pub ballot_contract_parameters: BallotContractParameters,
     pub token_ids: TokenIds,
-    pub addresses: Addresses,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
@@ -103,7 +102,6 @@ impl OracleConfig {
             ballot_contract_parameters: bootstrap.ballot_contract_parameters,
             update_contract_parameters: bootstrap.update_contract_parameters,
             token_ids,
-            addresses: bootstrap.addresses,
         }
     }
 
